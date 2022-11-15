@@ -8,7 +8,7 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/b2970b96e5e2
 contract Foundation {
     //1.OWNER CODE BLOCK
     //"owner" of the contract has "secretarial" role
-    address private owner;
+    address internal owner;
     error NotOwner(string message, address caller);
     modifier onlyOwner(){
         if(msg.sender != owner) {
@@ -26,10 +26,6 @@ contract Foundation {
     // 2. KEY STATE VARIABLES
     mapping(address => bool) internal memberMapping;
     address[] internal memberArray;
-    mapping(address => uint) internal grantRecipientMapping;
-    mapping(address => uint) internal charityRecipientMapping;
-    address[] internal grantRecipientArray;
-    address[] internal charityRecipientArray;
 
     //3.BECOMING A MEMBER
     //3.1 Membership Check
@@ -59,78 +55,208 @@ contract Foundation {
     }
 
     //4.FOUNDATION GRANT & CHARITY PROGRAM
+    //4.1 Key Variables
     using Counters for Counters.Counter;
     Counters.Counter private _programIdCounter;
-    enum ProposalStatusEnum {WAITING, PASSED, REJECTED}
+    string[] internal waitingProposals;
+    string[] internal proposalPassed;
+    string[] internal proposalRejected;
+    string internal mainProposal;
 
-    struct Programs {
-        ProposalStatusEnum status;
-        string programName;
-        uint programBeneficiaries;
-        uint implementationYear;
-        uint programBudgetUSD;
-        string[] programCountries;
-    }
-    mapping(uint => Programs) internal programsMapping;
-    
-    
-    //Members can make program proposals. These proposal will later wait in waiting proposals
-
-    function makeProgramProposal(
-
-        string calldata _programName,
-        uint _programBeneficiaries,
-        uint _implementationYear,
-        uint _programBudgetUSD,
-        string[] calldata _programCountries
-    ) external onlyMember {
-        ProposalStatusEnum _status;
-        Programs memory newProgram = Programs(
-            _status,
-            _programName, 
-            _programBeneficiaries, 
-            _implementationYear, 
-            _programBudgetUSD, 
-            _programCountries
-        );
-        uint programId = _programIdCounter.current();
-        _programIdCounter.increment();
-        programsMapping[programId] = newProgram;
+    //4.2 proposal submission function. Only Members
+    function makeProgramProposal(string calldata _programName) external onlyMember {
+        waitingProposals.push(_programName);
     } 
 
-    function getProgramDetails(uint id) external view returns(Programs memory) {
-        return programsMapping[id];
+    //5.2VOTING INITIATION CONTRACT
+    //Main Proposal is chosen according to whatever comes first principle. That's why it is waitingProposals[0]
+    //onlyOwner is disabled so that hackaton evaluators can call this function
+    uint public votingStartTime;
+    function chooseMainProposal() external /*onlyOwner*/ {
+        mainProposal = waitingProposals[0];
+        for(uint i = 0; i < waitingProposals.length-1; i++) {
+            waitingProposals[i] = waitingProposals[i+1];
+        }
+        waitingProposals.pop();
+        votingStartTime = block.timestamp;
     }
 
+
+    //6.VIEW FUNCTIONS:
+    //6.1 waiting, passed, rejected proposals
+    function getAllPro() external view returns(string[] memory) {
+        return waitingProposals;
+    }
+    function getAllProPassed() external view returns(string[] memory) {
+        return proposalPassed;
+    }
+    function getAllProRejected() external view returns(string[] memory) {
+        return proposalRejected;
+    }
+
+    //6.2 balance of the contract in Aurora
+    function getBalance() external view returns(uint) {
+        return (address(this).balance);
+    }
+
+    //6.3 contract address and owner
+    function getDetails() external view returns(address, address) {
+        return(owner, address(this));
+    }
+
+    //7. VOTING PROCESS ON THE MAIN PROPOSAL
+    //y: yes votes, n: no votes
+    uint internal y;
+    uint internal n;
+    mapping(address => bool) public votingStatus;
+    address[] internal voters;
+    function voteYes() external onlyMember {
+        require(votingStatus[msg.sender] == false, "you have already voted");
+        require(block.timestamp < votingStartTime + 20 minutes, "voting period has ended");
+        votingStatus[msg.sender] = true;
+        voters.push(msg.sender);
+        y++;
+    }
+    function voteNo() external onlyMember {
+        require(votingStatus[msg.sender] == false, "you have already voted");
+        require(block.timestamp < votingStartTime + 20 minutes, "voting period has ended");
+        votingStatus[msg.sender] = true;
+        voters.push(msg.sender);
+        n++;
+    }
+    function getVotingStatus() external view returns(bool) {
+        return votingStatus[msg.sender];
+    }
+
+    //9. VOTING RESULTS OF THE MAIN PROPOSAL
+    //this struct is to save voting results in resultsMapping after closing the voting.
+    // And getRecordStruct function is used to details of a voting session.
+    struct ResultStruct {
+        string proposalName;
+        uint yesV;
+        uint noV;
+        uint totalV;
+    }
+    ResultStruct record;
+    mapping(uint => ResultStruct) internal resultsMapping;
+
+    function getRecordStruct(uint id) external view returns(ResultStruct memory) {
+        return resultsMapping[id];
+    }
+
+    //8.CLOSING VOTING SESSION
+    //no need to reset votingStartTime here. 
+    function closeVoting() external /*onlyOwner*/ {
+        uint totalVotes = y + n;
+        uint percentage1 = y*100;
+        uint percentage2 = percentage1/totalVotes;
+        if(percentage2 >= 60) {
+            proposalPassed.push(mainProposal);
+        } else {
+            proposalRejected.push(mainProposal);
+        }
+        record = ResultStruct(mainProposal, y, n, totalVotes);
+        uint programId = _programIdCounter.current();
+        _programIdCounter.increment();
+        resultsMapping[programId] = record;
+    }
+    //reset the table for next voting
+    function resetTable() external /*onlyOwner*/ {
+        n=0;
+        y=0;
+        mainProposal = "";
+        for(uint i=0; i <voters.length; i++) {
+            votingStatus[voters[i]] = false;
+        }
+        delete voters;
+    }
     
 
 
+    //12. GRANT RECIPIENTS
+    //Recipients will receive their grants in NEAR token
+    //Therefore we are hardcoding NEAR address on Aurora
+    address[] internal grantRecipientsArray;
+    mapping(address => uint) grantRecipientMapping;
+    error AlreadyBeneficiary(string message, address beneficiary);
+    modifier isBeneficiary(address _beneficiary) {
+        for(uint i=0; i<grantRecipientsArray.length; i++) {
+            if(grantRecipientsArray[i] == _beneficiary) {
+                revert AlreadyBeneficiary("already beneficiary", _beneficiary);
+            }
+        }
+        _;
+    }
+    function addBeneficiary(address _receiver) external onlyOwner isBeneficiary(_receiver) {
+        grantRecipientsArray.push(_receiver);
+    }
+    function sendGrant(address _receiver, uint _amount) external onlyOwner {
+        require(transferEnabled == true, "transfer is disabled");
+        IERC20 token = IERC20(0xC42C30aC6Cc15faC9bD938618BcaA1a1FaE8501d);
+        token.transfer(_receiver, _amount);
+        grantRecipientMapping[_receiver] += _amount;
+    }
+    function sendGrantAuto(uint _amount) external onlyOwner {
+        require(transferEnabled == true, "transfer is disabled");
+        IERC20 token = IERC20(0xC42C30aC6Cc15faC9bD938618BcaA1a1FaE8501d);
+        for(uint i=0; i<grantRecipientsArray.length; i++) {
+            token.transfer(grantRecipientsArray[i], _amount);
+            grantRecipientMapping[grantRecipientsArray[i]] += _amount;
+        }
+    }
 
-    
 
 
-
-
-
-
-
+    //15. SAFETY PRECAUTION FOR TRANSFER FUNCTIONS
     bool public transferEnabled =  false;
     function toggleTransfer() external onlyOwner {
         transferEnabled = !transferEnabled;
     }
 
-    function depositTokens(address _receiver, address _tokenAddress, uint _amount, uint _time) external {
-        IERC20 token = IERC20(_tokenAddress);
-        uint amount = _amount * (10**18);
-        token.transfer(_receiver, amount);
+    //10. LEAVING THE MEMBERSHIP
+    //we are removing the msg.sender in an orderly way.
+    function leaveMembership() external onlyMember {
+        uint memberIndex;
+        for(uint i=0; i<memberArray.length; i++) {
+            if(memberArray[i] == msg.sender) {
+                memberIndex = i;
+                break;
+            }
+        }
+        for(uint i = memberIndex; i < memberArray.length -1; i++) {
+            memberArray[i] = memberArray[i+1];
+        }
+        memberArray.pop();
+        memberMapping[msg.sender] = false;
+    }
+
+    //11. REMOVING ANY MEMBER 
+    //owner can remove a member to prevent exploitation
+    function removeMember(address _member) external onlyOwner {
+        uint memberIndex;
+        for(uint i=0; i<memberArray.length; i++) {
+            if(memberArray[i] == _member) {
+                memberIndex = i;
+                break;
+            }
+        }
+        for(uint i = memberIndex; i < memberArray.length -1; i++) {
+            memberArray[i] = memberArray[i+1];
+        }
+        memberArray.pop();
+        memberMapping[_member] = false;
+    }
+
+    //owner can withdraw all the ether inside the contract
+    function withdraw() external onlyOwner {
+        require(transferEnabled == true, "transfer is disabled");
+        (bool success, ) = owner.call{value: address(this).balance}("");
+        require(success, "you are not owner");
     }
 
 
-
-
-
-
-
+    fallback() external payable {}
+    receive() external payable {}
 
 
 
