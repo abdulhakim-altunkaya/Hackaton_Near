@@ -41,6 +41,9 @@ contract Foundation {
     }
 
     //3.2 Membership Function
+    // To become a member, people need to pay 10 Aurora Token to this contract.
+    //However, the payment part will be disabled so that Hackaton evaluators can test contract.
+    //Aurora coin address is hardcoded here, however, in future version, it can replaced with NEAR coin.
     function becomeMember() external payable {
         bool status = false;
         for(uint i=0; i<memberArray.length; i++) {
@@ -49,7 +52,9 @@ contract Foundation {
             }
         }
         require(status == false, "you are already a member");
-        require(msg.value >= 1 ether, "pay the membership fee of 1 FTM");
+        //IERC20 auroraCoin = IERC20(0x8bec47865ade3b172a928df8f990bc7f2a3b9f79);
+        //uint _amount = 10*(10**18); 
+        //auroraCoin.transfer(address(this), _amount);
         memberArray.push(msg.sender);
         memberMapping[msg.sender] = true;
     }
@@ -93,8 +98,15 @@ contract Foundation {
     function getAllProRejected() external view returns(string[] memory) {
         return proposalRejected;
     }
+    function getMembershipStatus() external view returns(string memory) {
+        if(memberMapping[msg.sender] == true) {
+            return "you are member";
+        } else {
+            return "you are not member";
+        }
+    }
 
-    //6.2 balance of the contract in Aurora
+    //6.2 balance of the contract
     function getBalance() external view returns(uint) {
         return (address(this).balance);
     }
@@ -174,8 +186,8 @@ contract Foundation {
 
 
     //12. GRANT RECIPIENTS
-    //Recipients will receive their grants in NEAR token
-    //Therefore we are hardcoding NEAR address on Aurora
+    //Recipients will receive their grants in AURORA token
+    //Therefore we are hardcoding AURORA address here. However, in future it can replaced with NEAR token.
     address[] internal grantRecipientsArray;
     mapping(address => uint) grantRecipientMapping;
     error AlreadyBeneficiary(string message, address beneficiary);
@@ -187,18 +199,18 @@ contract Foundation {
         }
         _;
     }
-    function addBeneficiary(address _receiver) external onlyOwner isBeneficiary(_receiver) {
+    function addBeneficiary(address _receiver) external /*onlyOwner*/ isBeneficiary(_receiver) {
         grantRecipientsArray.push(_receiver);
     }
     function sendGrant(address _receiver, uint _amount) external onlyOwner {
         require(transferEnabled == true, "transfer is disabled");
-        IERC20 token = IERC20(0xC42C30aC6Cc15faC9bD938618BcaA1a1FaE8501d);
+        IERC20 token = IERC20(0x8bec47865ade3b172a928df8f990bc7f2a3b9f79);
         token.transfer(_receiver, _amount);
         grantRecipientMapping[_receiver] += _amount;
     }
     function sendGrantAuto(uint _amount) external onlyOwner {
         require(transferEnabled == true, "transfer is disabled");
-        IERC20 token = IERC20(0xC42C30aC6Cc15faC9bD938618BcaA1a1FaE8501d);
+        IERC20 token = IERC20(0x8bec47865ade3b172a928df8f990bc7f2a3b9f79);
         for(uint i=0; i<grantRecipientsArray.length; i++) {
             token.transfer(grantRecipientsArray[i], _amount);
             grantRecipientMapping[grantRecipientsArray[i]] += _amount;
