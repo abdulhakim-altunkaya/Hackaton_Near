@@ -1,10 +1,12 @@
+import Upperbar from './components/Upperbar';
+import Lowerbar from "./components/Lowerbar"
+
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        some text
-      </header>
+      <Upperbar />
+      <Lowerbar />
     </div>
   );
 }

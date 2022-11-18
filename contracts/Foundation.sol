@@ -24,7 +24,7 @@ contract Foundation {
     }
 
     // 2. KEY STATE VARIABLES
-    mapping(address => bool) internal memberMapping;
+    mapping(address => bool) public memberMapping;
     address[] internal memberArray;
 
     //3.BECOMING A MEMBER
@@ -64,7 +64,7 @@ contract Foundation {
     using Counters for Counters.Counter;
     Counters.Counter private _programIdCounter;
     string[] internal waitingProposals;
-    string[] internal proposalPassed;
+    string[] internal proposalPassed; 
     string[] internal proposalRejected;
     string internal mainProposal;
 
