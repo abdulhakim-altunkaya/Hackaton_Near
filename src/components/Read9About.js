@@ -5,7 +5,7 @@ function Read9About() {
   const navigate = useNavigate();
   return (
     <div>
-        <h1>BETELGEUSE FOUNDATION</h1>
+        <h4>BETELGEUSE FOUNDATION</h4>
         <p>Betelegeuse Foundation is project prepared for application to NEAR MetaBuildHackaton III</p>
         <p>Project Owner</p>
         <br />

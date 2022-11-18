@@ -6,7 +6,7 @@ function Read10Guide() {
   
   return (
     <div>
-        <h1>SYSTEM MANUEL</h1>
+        <h4>SYSTEM MANUEL</h4>
         <p>Betelegeuse Foundation System is open to everybody.</p>
         <p>1. Make sure you are on Aurora Test Network on your Metamask</p>
         <br />

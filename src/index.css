@@ -40,6 +40,7 @@ body {
 }
 
 .Lowerbar {
+  padding-top: 10px;
   min-height: 85vh;
   overflow-y: auto;
   display: flex;
