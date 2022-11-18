@@ -11,6 +11,3 @@ REPORT_GAS=true npx hardhat test
 npx hardhat node
 npx hardhat run scripts/deploy.js
 ```
-
-
-<a target="_blank" href="https://icons8.com/icon/47718/christmas-star">Christmas Star</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
