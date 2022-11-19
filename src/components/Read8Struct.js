@@ -27,12 +27,19 @@ function Read8Struct() {
     const getStruct = async () => {
         await connectContract();
         const txResponse = await contract.getRecordStruct(inputValue);
-        const novotes = await txResponse.noV.toNumber();
-        const yesvotes = await txResponse.yesV.toNumber()
-        setName(txResponse.proposalName);
-        setNoVotes(novotes);
-        setYesVotes(yesvotes);
-        setTotalVotes(novotes+yesvotes);
+        if(txResponse.proposalName.length < 2) {
+            setName("no such proposal, enter correct id number");
+            setNoVotes(0);
+            setYesVotes(0);
+            setTotalVotes(0);
+        } else {
+            const novotes = await txResponse.noV.toNumber();
+            const yesvotes = await txResponse.yesV.toNumber();
+            setName(txResponse.proposalName);
+            setNoVotes(novotes);
+            setYesVotes(yesvotes);
+            setTotalVotes(novotes+yesvotes);
+        }
     }
 
 
@@ -40,22 +47,18 @@ function Read8Struct() {
   return (
     <div>
         <button className='button-54' onClick={getStruct}>PREVIOUS PROPOSALS DETAILS</button>
-        <br />
-        <input type="number" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder='enter proposal id'/>
-        <p>
-            <strong>Proposal Name: </strong> {name}
-            <br />
-            <strong>Yes Votes: </strong> {yesVotes}
-            <br />
-            <strong>No Votes: </strong> {noVotes}
-            <br />
-            <strong>Total Votes: </strong> {totalVotes}
-        
-        
-        
-        </p>
-        <br />
-        <br />
+        <div style={{paddingTop:"20px", paddingBottom: "20px"}}>
+            <input type="number" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder='enter proposal id'/>
+            <p>
+                <strong>Proposal Name: </strong> {name}
+                <br />
+                <strong>Yes Votes: </strong> {yesVotes}
+                <br />
+                <strong>No Votes: </strong> {noVotes}
+                <br />
+                <strong>Total Votes: </strong> {totalVotes}
+            </p>
+        </div>
         <button className='button-54' onClick={ ()=>navigate("/")}>Homepage</button>
     </div>
   )

@@ -41,10 +41,8 @@ function Read5Rejected() {
     return (
         <div>
             <button className='button-54' onClick={displayArray}>See Rejected Proposals</button>
-            <br />
-            <div> <strong>Rejected Proposals: </strong>{content}</div>
-            <br />
-            <button className='button-56' onClick={ () => navigate("/")}>Homepage</button>
+            <div style={{paddingTop:"20px", paddingBottom: "20px"}}> <strong>Rejected Proposals: </strong>{content}</div>
+            <button className='button-54' onClick={ () => navigate("/")}>Homepage</button>
 
         </div>
     )

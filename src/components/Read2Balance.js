@@ -22,7 +22,7 @@ function Read2Balance() {
   }
 
   const getBalance = async () => {
-    connectContract();
+    await connectContract();
     const txResponse = await contract.getBalance();
     if(txResponse < 1) {
       setFoundationBalance("Balance is 0");

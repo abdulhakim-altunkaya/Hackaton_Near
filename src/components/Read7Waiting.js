@@ -44,9 +44,7 @@ function Read7Waiting() {
     return (
         <div>
             <button onClick={displayArray} className="button-54" >See Waiting Proposals</button>
-            <br />
-            <div><strong>Waiting Proposals: </strong>{content}</div>
-            <br />
+            <div style={{paddingTop:"20px", paddingBottom: "20px"}}><strong>Waiting Proposals: </strong>{content}</div>
             <button className="button-54" onClick={ () => navigate("/")}>Homepage</button>
         </div>
     )

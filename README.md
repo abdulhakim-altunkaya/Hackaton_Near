@@ -11,3 +11,7 @@ REPORT_GAS=true npx hardhat test
 npx hardhat node
 npx hardhat run scripts/deploy.js
 ```
+dont forget to convert FTM to AOA in faoundation contract and also in contract ABI, contractAddress, hardhat.config.js, .env
+dont forget to update localhost link to netlify link in Uppertop1.js component
+
+bu

@@ -28,15 +28,16 @@ function Read1Details() {
       <Read2Balance />
       <Read3Info />
       <Read4Check account={account} />
-      /*
-      <button className='button-56' onClick={() => navigate("/proposals")}>SEE WAITING PROPOSALS</button>
+      <button className='button-54' onClick={() => navigate("/proposals")}>SEE WAITING PROPOSALS</button>
       <br />
-      <button className='button-56' onClick={() => navigate('/passed')}>SEE PASSED PROPOSALS</button>
       <br />
-      <button className='button-56' onClick={() => navigate('/rejected')}>SEE REJECTED PROPOSALS</button>
+      <button className='button-54' onClick={() => navigate('/passed')}>SEE PASSED PROPOSALS</button>
       <br />
-      <button className='button-56' onClick={() => navigate("/details")}>PREVIOUS PROPOSALS DETAILS</button>
-      */
+      <br />
+      <button className='button-54' onClick={() => navigate('/rejected')}>SEE REJECTED PROPOSALS</button>
+      <br />
+      <br />
+      <button className='button-54' onClick={() => navigate("/details")}>PREVIOUS PROPOSALS DETAILS</button>
     </div>
   )
 }

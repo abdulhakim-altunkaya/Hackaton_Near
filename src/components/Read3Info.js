@@ -21,7 +21,7 @@ function Read3Info() {
   }
 
   const getData = async () => {
-    connectContract();
+    await connectContract();
     const txResponse = await contract.getDetails();
     const {0: owner, 1: contractAddress} = txResponse;
     setFoundationAddress(contractAddress);

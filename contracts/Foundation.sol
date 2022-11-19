@@ -1,21 +1,24 @@
 //SPDX-License-Identifier: GPL-3.0
 
-pragma solidity >=0.8.1;
+pragma solidity >=0.8.10;
 
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/b2970b96e5e2be297421cd7690e3502e49f7deff/contracts/token/ERC20/IERC20.sol";
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/b2970b96e5e2be297421cd7690e3502e49f7deff/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+// import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/b2970b96e5e2be297421cd7690e3502e49f7deff/contracts/token/ERC20/IERC20.sol";
+// import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/b2970b96e5e2be297421cd7690e3502e49f7deff/contracts/utils/Counters.sol";
 
-contract Foundation {
+contract Foundation { 
     //1.OWNER CODE BLOCK
     //"owner" of the contract has "secretarial" role
-    address internal owner;
+    address public owner;
     error NotOwner(string message, address caller);
     modifier onlyOwner(){
         if(msg.sender != owner) {
-            revert NotOwner("you are not owner",  msg.sender);
+            revert NotOwner("you are not owner", msg.sender);
         }
         _;
     }
+
     constructor() {
         owner = msg.sender;
     }
@@ -53,7 +56,7 @@ contract Foundation {
         }
         require(status == false, "you are already a member");
         //IERC20 auroraCoin = IERC20(0x8bec47865ade3b172a928df8f990bc7f2a3b9f79);
-        //uint _amount = 10*(10**18); 
+        //uint _amount = 2*(10**18); 
         //auroraCoin.transfer(address(this), _amount);
         memberArray.push(msg.sender);
         memberMapping[msg.sender] = true;
@@ -188,6 +191,7 @@ contract Foundation {
     //12. GRANT RECIPIENTS
     //Recipients will receive their grants in AURORA token
     //Therefore we are hardcoding AURORA address here. However, in future it can replaced with NEAR token.
+    mapping(address => uint) donorsMapping;
     address[] internal grantRecipientsArray;
     mapping(address => uint) grantRecipientMapping;
     error AlreadyBeneficiary(string message, address beneficiary);
@@ -202,15 +206,21 @@ contract Foundation {
     function addBeneficiary(address _receiver) external /*onlyOwner*/ isBeneficiary(_receiver) {
         grantRecipientsArray.push(_receiver);
     }
-    function sendGrant(address _receiver, uint _amount) external onlyOwner {
+    function donate(address _tokenAddress, uint _amount) external {
+        IERC20 token = IERC20(_tokenAddress);
+        token.transfer(address(this), _amount);
+        donorsMapping[msg.sender] += _amount;
+
+    }
+    function sendGrant(address _receiver, address _tokenAddress, uint _amount) external onlyOwner {
         require(transferEnabled == true, "transfer is disabled");
-        IERC20 token = IERC20(0x8bec47865ade3b172a928df8f990bc7f2a3b9f79);
+        IERC20 token = IERC20(_tokenAddress);
         token.transfer(_receiver, _amount);
         grantRecipientMapping[_receiver] += _amount;
     }
-    function sendGrantAuto(uint _amount) external onlyOwner {
+    function sendGrantAuto(address _tokenAddress, uint _amount) external onlyOwner {
         require(transferEnabled == true, "transfer is disabled");
-        IERC20 token = IERC20(0x8bec47865ade3b172a928df8f990bc7f2a3b9f79);
+        IERC20 token = IERC20(_tokenAddress);
         for(uint i=0; i<grantRecipientsArray.length; i++) {
             token.transfer(grantRecipientsArray[i], _amount);
             grantRecipientMapping[grantRecipientsArray[i]] += _amount;

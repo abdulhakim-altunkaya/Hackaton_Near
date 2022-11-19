@@ -6,9 +6,10 @@ function UpperbarTop1() {
   };
   
   return (
-    <div> onClick={() => sameTab('http://localhost:3000/about')}> 
-      <a href="http://localhost:3000/about" target="_self" rel="noopener noreferrer"> 
-      <span style={{color: "red"}}>BETELGEUSE </span> FOUNDATION</a> 
+    <div className='heading' onClick={() => sameTab('http://localhost:3000/')}> 
+        <a className='links' href="http://localhost:3000/" target="_self" rel="noopener noreferrer"> 
+            <span className='links' style={{color: "red"}}>BETELGEUSE</span>FOUNDATION
+        </a>
     </div>
   )
 }

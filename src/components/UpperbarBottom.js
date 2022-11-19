@@ -11,7 +11,7 @@ function UpperbarBottom() {
       <div onClick={() => sameTab('http://localhost:3000/about')}> 
           <a href="http://localhost:3000/about" target="_self" rel="noopener noreferrer"> 
           <button className="button-52" >About</button></a> 
-      </div>
+      </div> &nbsp; &nbsp; &nbsp;
       <div onClick={() => sameTab('http://localhost:3000/guide')}> 
           <a href="http://localhost:3000/guide" target="_self" rel="noopener noreferrer"> 
           <button className="button-52" >Guide</button></a> 
