@@ -237,6 +237,19 @@ export const ABI = [
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "mainProposal",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "string",

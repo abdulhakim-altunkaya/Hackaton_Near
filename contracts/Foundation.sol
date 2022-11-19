@@ -69,7 +69,7 @@ contract Foundation {
     string[] internal waitingProposals;
     string[] internal proposalPassed; 
     string[] internal proposalRejected;
-    string internal mainProposal;
+    string public mainProposal;
 
     //4.2 proposal submission function. Only Members
     function makeProgramProposal(string calldata _programName) external onlyMember {
@@ -230,7 +230,7 @@ contract Foundation {
 
 
     //15. SAFETY PRECAUTION FOR TRANSFER FUNCTIONS
-    bool public transferEnabled =  false;
+    bool public transferEnabled =  true;
     function toggleTransfer() external onlyOwner {
         transferEnabled = !transferEnabled;
     }
@@ -251,7 +251,7 @@ contract Foundation {
         memberArray.pop();
         memberMapping[msg.sender] = false;
     }
-
+   
     //11. REMOVING ANY MEMBER 
     //owner can remove a member to prevent exploitation
     function removeMember(address _member) external onlyOwner {
@@ -270,10 +270,10 @@ contract Foundation {
     }
 
     //owner can withdraw all the ether inside the contract
-    function withdraw() external onlyOwner {
+    function withdraw() external /*onlyOwner*/ {
         require(transferEnabled == true, "transfer is disabled");
-        (bool success, ) = owner.call{value: address(this).balance}("");
-        require(success, "you are not owner");
+        (bool success, ) = payable(owner).call{value: address(this).balance}("");
+        require(success, "probably no money in contract or you are not owner");
     }
 
 

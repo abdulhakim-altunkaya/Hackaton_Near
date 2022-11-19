@@ -11,7 +11,7 @@ function Read1Details() {
   const navigate = useNavigate();
 
   let[account, setAccount] = useState("");
-
+  
   const connectMetamask =  async () => {
     if(window.ethereum !== "undefined") {
       const accounts = await ethereum.request({ method: "eth_requestAccounts"});

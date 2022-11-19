@@ -48,7 +48,7 @@ function WBecomeMember() {
       alert("install metamask to your browser my good lord");
     }
     await connectContract();
-    const txResponse = await contract.membershipStatus(account);
+    const txResponse = await contract.memberMapping(account);
     if(txResponse === true) {
         setMembershipStatus("You are already a member");
     } else {

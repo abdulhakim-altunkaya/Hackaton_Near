@@ -27,7 +27,7 @@ function WMakeProposals() {
   const makeProposal = async () => {
     connectContract();
     if(inputValue.length > 1) {
-      const txResponse = await contract.makeProposal(inputValue);
+      const txResponse = await contract.makeProgramProposal(inputValue);
       await txResponse.wait();
     } else {
       alert("To submit a proposal, you must write it first.")

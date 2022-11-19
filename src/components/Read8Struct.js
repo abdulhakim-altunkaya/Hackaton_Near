@@ -49,15 +49,16 @@ function Read8Struct() {
         <button className='button-54' onClick={getStruct}>PREVIOUS PROPOSALS DETAILS</button>
         <div style={{paddingTop:"20px", paddingBottom: "20px"}}>
             <input type="number" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder='enter proposal id'/>
-            <p>
-                <strong>Proposal Name: </strong> {name}
+            <br />
+            <div style={{lineHeight: "1.8", paddingTop: "10px"}}>
+                <span><strong>Proposal Name: </strong> {name}</span> 
                 <br />
-                <strong>Yes Votes: </strong> {yesVotes}
+                <span><strong>Yes Votes: </strong> {yesVotes}</span>
                 <br />
-                <strong>No Votes: </strong> {noVotes}
+                <span><strong>No Votes: </strong> {noVotes}</span>
                 <br />
-                <strong>Total Votes: </strong> {totalVotes}
-            </p>
+                <span><strong>Total Votes: </strong> {totalVotes}</span>
+            </div>
         </div>
         <button className='button-54' onClick={ ()=>navigate("/")}>Homepage</button>
     </div>
