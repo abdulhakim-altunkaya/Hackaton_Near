@@ -46,7 +46,7 @@ function Read8Struct() {
 
   return (
     <div>
-        <button className='button-54' onClick={getStruct}>PREVIOUS PROPOSALS DETAILS</button>
+        <button className='button-54' onClick={getStruct}>SEE PREVIOUS VOTINGS</button>
         <div style={{paddingTop:"20px", paddingBottom: "20px"}}>
             <input type="number" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder='enter proposal id'/>
             <br />

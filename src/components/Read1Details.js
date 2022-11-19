@@ -1,10 +1,10 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Read2Balance from './Read2Balance';
 import Read3Info from './Read3Info';
 import Read4Check from "./Read4Check";
- 
+import D1Enable from "./D1Enable";
 
 function Read1Details() {
   const {ethereum} = window;
@@ -28,16 +28,11 @@ function Read1Details() {
       <Read2Balance />
       <Read3Info />
       <Read4Check account={account} />
-      <button className='button-54' onClick={() => navigate("/proposals")}>SEE WAITING PROPOSALS</button>
+      <button className='button-54' onClick={() => navigate("/all")}>ALL PROPOSALS</button>
       <br />
       <br />
-      <button className='button-54' onClick={() => navigate('/passed')}>SEE PASSED PROPOSALS</button>
-      <br />
-      <br />
-      <button className='button-54' onClick={() => navigate('/rejected')}>SEE REJECTED PROPOSALS</button>
-      <br />
-      <br />
-      <button className='button-54' onClick={() => navigate("/details")}>PREVIOUS PROPOSALS DETAILS</button>
+      <h3>DONATION AREA</h3>
+      <D1Enable />
     </div>
   )
 }

@@ -178,6 +178,9 @@ body {
   color: white;
   font-weight: bolder;
 }
+.lightGreen {
+  background-color: lightgreen;
+}
 
 /*SCROLLBAR STYLE*/
 /* width */

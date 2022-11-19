@@ -7,6 +7,7 @@ import Read7Waiting from "./Read7Waiting";
 import Read8Struct from './Read8Struct';
 import Read9About from "./Read9About";
 import Read10Guide from "./Read10Guide";
+import Read11Proposals from "./Read11Proposals";
 
 function Read() {
   return (
@@ -20,6 +21,7 @@ function Read() {
             <Route path="/details" element={ <Read8Struct /> } />
             <Route path="/about" element={ <Read9About /> } />
             <Route path="/guide" element={ <Read10Guide /> } />
+            <Route path="/all" element={ <Read11Proposals /> } />
           </Routes>
       </Router>
     </div>
