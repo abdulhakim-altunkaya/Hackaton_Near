@@ -113,6 +113,9 @@ contract Foundation {
     function getBalance() external view returns(uint) {
         return (address(this).balance);
     }
+    function getTokenBalance(address _tokenAddress) external view returns(uint) {
+        return IERC20(_tokenAddress).balanceOf(address(this));
+    }
 
     //6.3 contract address and owner
     function getDetails() external view returns(address, address) {

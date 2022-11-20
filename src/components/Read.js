@@ -8,6 +8,8 @@ import Read8Struct from './Read8Struct';
 import Read9About from "./Read9About";
 import Read10Guide from "./Read10Guide";
 import Read11Proposals from "./Read11Proposals";
+import D2Donate from './D2Donate';
+import D3Treasury from './D3Treasury';
 
 function Read() {
   return (
@@ -22,6 +24,9 @@ function Read() {
             <Route path="/about" element={ <Read9About /> } />
             <Route path="/guide" element={ <Read10Guide /> } />
             <Route path="/all" element={ <Read11Proposals /> } />
+            <Route path="/donate" element={ <D2Donate /> } />
+            <Route path="/treasury" element={ <D3Treasury /> } />
+            
           </Routes>
       </Router>
     </div>
