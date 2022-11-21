@@ -1,7 +1,8 @@
 import React from 'react';
+import {ethers } from "ethers"; 
+import { useState } from 'react';
 import {ABI} from "./ContractABI.js";
 import {CONTRACT_ADDRESS} from "./ContractAddress.js";
-import {ethers } from "ethers"; 
 
 function D1Enable() {
     let contract;
@@ -17,16 +18,26 @@ function D1Enable() {
         contract = new ethers.Contract(Address, ABI, signer);
     }
 
+    let[status, setStatus] = useState("");
+
     const enablePayments = async () => {
         await connectContract();
         const txResponse = await contract.toggleTransfer();
         await txResponse.wait();
+        const txBool = await contract.transferEnabled();
+        if(txBool === true){
+            setStatus("Transfers Status: Enabled");
+        } else {
+            setStatus("Transfers Status: Disabled");
+        }
+
     }
   return (
 
     <div>
         <div>
             <button className='button-54 lightGreen' onClick={enablePayments}>Enable/Disable Payments (Admin)</button>
+            <p>{status}</p>
         </div>
     </div>
   )

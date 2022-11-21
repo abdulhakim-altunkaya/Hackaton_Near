@@ -28,6 +28,7 @@ function Read1Details() {
 
   return (
     <div>
+      <span id="smallscreen"></span>
       <button className='button-54' onClick={connectMetamask}> Connect to Metamask </button>
       <p>Your Account is: {metamaskAccount}</p>
       <Read2Balance />
