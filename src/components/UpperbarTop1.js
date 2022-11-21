@@ -6,8 +6,8 @@ function UpperbarTop1() {
   };
   
   return (
-    <div className='heading' onClick={() => sameTab('http://localhost:3000/')}> 
-        <a className='links' href="http://localhost:3000/" target="_self" rel="noopener noreferrer"> 
+    <div className='heading' onClick={() => sameTab('https://dainty-khapse-f31682.netlify.app/')}> 
+        <a className='links' href="https://dainty-khapse-f31682.netlify.app/" target="_self" rel="noopener noreferrer"> 
             <span className='links' style={{color: "red"}}>BETELGEUSE</span>FOUNDATION
         </a>
     </div>
