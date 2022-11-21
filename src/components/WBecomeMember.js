@@ -29,10 +29,13 @@ function WBecomeMember() {
   const becomeMember = async () => {
     await connectContract();
     if(inputValue < 1) {
-      alert("you need to pay membership fee. Pay at least 5 Aurora Coin. Type 5 in the input area");
+      alert("you need to pay membership fee. Pay at least 0 Aurora Coin. Type 1 in the input area");
     } else {
       let finalAmount = BigInt(inputValue*(10**18));
-      const txResponse = await contract.becomeMember({value: finalAmount});
+      console.log(finalAmount);
+      //Below line is disabled to let Near Hackaton evaluators to test the system 
+      //const txResponse = await contract.becomeMember({value: finalAmount});
+      const txResponse = await contract.becomeMember();
       await txResponse.wait();
     }
   }
@@ -61,10 +64,13 @@ function WBecomeMember() {
         <button className='button-54' onClick={checkStatus}>Check to see if you are a Member</button>
         <p>{membershipStatus}</p>
         <button className='button-54' onClick={becomeMember}>Become a Member</button>
-        <p>To become a member you need to pay at least 2 Aurora Coin to the Foundation</p>
+        <p>To become a member you need to pay at least 0 Aurora Coin to the Foundation.
+          You can type 1 in the input field. Don't worry, payment is disabled for now.
+        </p>
+
         <input type="number" 
             value = {inputValue}
-            placeholder='Minimum is 2'
+            placeholder='Minimum is 0'
             onChange={e => setInputValue(e.target.value) }/>
         <br />
         <br />

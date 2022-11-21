@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Read2Balance from './Read2Balance';
+
 import Read3Info from './Read3Info';
 import Read4Check from "./Read4Check";
 import D1Enable from "./D1Enable";
@@ -31,7 +31,6 @@ function Read1Details() {
       <span id="smallscreen"></span>
       <button className='button-54' onClick={connectMetamask}> Connect to Metamask </button>
       <p>Your Account is: {metamaskAccount}</p>
-      <Read2Balance />
       <Read3Info />
       <Read4Check account={metamaskAccount} />
       <button className='button-54' onClick={() => navigate("/all")}>ALL PROPOSALS</button>
