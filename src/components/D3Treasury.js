@@ -26,14 +26,26 @@ function D3Treasury() {
 
     const getAuroraBalance = async () => {
         await connectContract();
-        console.log(contract.address);
-        console.log(tokenAddress);
+        const txResponse = await contract.getBalance();
+        if(txResponse < 1) {
+            setAuroraBalance("Balance is 0");
+        } else {
+            let data = txResponse.toString();
+            let data2 = data.slice(0, -18);
+            setAuroraBalance(`Balance is ${data2} `);
+        }
     }
 
     const getTokenBalance = async () => {
         await connectContract();
-        console.log(contract.address);
-        console.log(tokenAddress);
+        const txResponse = await contract.getTokenBalance(tokenAddress);
+        await txResponse.wait();
+        if(txResponse < 1) {
+            setTokenBalance("Balance is 0");
+        } else {
+            let data = txResponse.toString();
+            setTokenBalance(` ${data} `);
+        }
     }
 
 

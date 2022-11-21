@@ -12,7 +12,7 @@ function Read2Balance() {
   let signer;
   const CONTRACT_ABI = ABI;
   const ADDRESS = CONTRACT_ADDRESS;
-
+ 
   const connectContract = async () => {
     const Address = ADDRESS;
     const ABI = CONTRACT_ABI;

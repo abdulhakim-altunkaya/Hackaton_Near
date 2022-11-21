@@ -50,7 +50,7 @@ function WBecomeMember() {
     await connectContract();
     const txResponse = await contract.memberMapping(account);
     if(txResponse === true) {
-        setMembershipStatus("You are already a member");
+        setMembershipStatus("You are a member");
     } else {
         setMembershipStatus("You are not a member yet");
     }
